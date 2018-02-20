@@ -312,11 +312,17 @@ class Select extends React.Component {
 		if (this.props.disabled || (event.type === 'mousedown' && event.button !== 0)) {
 			return;
 		}
-		// If the menu isn't open, let the event bubble to the main handleMouseDown
+		// If menu isn't open but input is focused, ensure menu is open.
+		// Otherwise, set input focused and open the menu.
 		if (!this.state.isOpen) {
-			this.setState({
-				isOpen: true,
-			});
+			if (this.state.isFocused) {
+				this.setState({
+					isOpen: true,
+				});
+			} else {
+				this._openAfterFocus = true;
+				this.focus();
+			}
 		}
 		// prevent default event handlers
 		event.stopPropagation();
